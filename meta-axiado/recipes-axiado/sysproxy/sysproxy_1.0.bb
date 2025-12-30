@@ -54,4 +54,5 @@ do_install() {
         install -m 0644 ${S}/sysproxy.service ${D}/${systemd_unitdir}/system
         install -d ${D}${bindir}
         install -m 0755 ${B}/sysmgr_proxy ${D}${bindir}
+        install -d ${D}/etc/ax-firmware-version # Create directory to store AX firmware version information (generated at runtime)
 }
