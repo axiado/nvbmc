@@ -1,0 +1,26 @@
+From 7ab645adc58af3677c05d8e6b400a67edfbf00e2 Mon Sep 17 00:00:00 2001
+From: Deepika M <axiado-1597@axiado.com>
+Date: Fri, 2 Jan 2026 02:48:31 -0800
+Subject: [PATCH] Fix for virtual media ui components
+Upstream-Status: Pending
+Signed-off-by: Deepika M <axiado-1597@axiado.com>
+---
+ src/store/modules/Operations/VirtualMediaStore.js | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/store/modules/Operations/VirtualMediaStore.js b/src/store/modules/Operations/VirtualMediaStore.js
+index 13872fc..bfdb0f1 100644
+--- a/src/store/modules/Operations/VirtualMediaStore.js
++++ b/src/store/modules/Operations/VirtualMediaStore.js
+@@ -109,7 +109,7 @@ const VirtualMediaStore = {
+           )
+           .then((devices) => api.all(devices.map((device) => api.get(device))));
+         
+-        const proxyDevices = devices
++        let proxyDevices = devices
+           .filter((d) => getters['isProxyDevice'](d.data))
+           .map((device) => ({
+             ...device.data,
+-- 
+2.34.1
+
