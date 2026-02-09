@@ -5,4 +5,3 @@ RDEPENDS:${PN}-extras += "ax-usb \
                           systemd-analyze \
                           usbutils \
                           "
-RDEPENDS:${PN}-extras:append:gb200nvl-bmc-axiado-github = " eipdrv-axiado shimfwl-axiado"
