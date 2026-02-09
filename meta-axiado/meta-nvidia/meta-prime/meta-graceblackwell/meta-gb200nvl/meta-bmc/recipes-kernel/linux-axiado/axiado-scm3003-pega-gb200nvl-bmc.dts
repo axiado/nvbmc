@@ -6,7 +6,6 @@
 /dts-v1/;
 
 #include "ax3000-scm3003.dtsi"
-#include "ax3000-net-mod.dtsi"
 #include <dt-bindings/gpio/gpio.h>
 
 / {
