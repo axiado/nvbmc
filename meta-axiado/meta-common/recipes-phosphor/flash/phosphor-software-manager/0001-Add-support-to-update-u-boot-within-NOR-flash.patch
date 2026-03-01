@@ -1,19 +1,15 @@
-From a4ca17fbe5e9e988c9469fd2d29683498c951a89 Mon Sep 17 00:00:00 2001
-From: Kuan-Jui Chiu <kchiu@axiado.com>
-Date: Thu, 31 Jul 2025 00:38:52 -0700
+From 20134db0b402b8840c9df8dd01d6667fad99e246 Mon Sep 17 00:00:00 2001
+From: Adarsh Kumar <adarsh.kumar@axiado.com>
+Date: Thu, 12 Feb 2026 22:48:58 -0800
 Subject: [PATCH] Add support to update u-boot within NOR flash
 
 Upstream-Status: Pending
 
----
- obmc-flash-bmc | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
-
-diff --git a/obmc-flash-bmc b/obmc-flash-bmc
-index 442bb7a..18f915f 100644
---- a/obmc-flash-bmc
-+++ b/obmc-flash-bmc
-@@ -562,15 +562,10 @@ function mmc_mount() {
+diff --git a/bmc/obmc-flash-bmc b/bmc/obmc-flash-bmc
+index f9cc4e2..dfd37bd 100644
+--- a/bmc/obmc-flash-bmc
++++ b/bmc/obmc-flash-bmc
+@@ -575,15 +575,10 @@ function mmc_mount() {
  }
  
  function mmc_update() {
@@ -33,3 +29,6 @@ index 442bb7a..18f915f 100644
  
      # Update the secondary (non-running) boot and rofs partitions.
      label="$(mmc_get_secondary_label)"
+-- 
+2.34.1
+

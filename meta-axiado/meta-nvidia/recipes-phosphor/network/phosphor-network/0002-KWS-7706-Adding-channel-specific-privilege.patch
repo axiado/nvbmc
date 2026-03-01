@@ -1,19 +1,18 @@
-From ebd84b0f376f436509826e89bc55c7e4253cfd87 Mon Sep 17 00:00:00 2001
-From: Deepika M <axiado-1597@axiado.com>
-Date: Tue, 14 Oct 2025 02:39:21 -0700
-Subject: [PATCH] 
- Fix:0002-KWS-7706-Adding-channel-specific-privilege-to-network
+From b3451fa9d63586fb4f260b0738ec65faba28a29b Mon Sep 17 00:00:00 2001
+From: Adarsh Kumar <adarsh.kumar@axiado.com>
+Date: Fri, 13 Feb 2026 04:06:59 -0800
+Subject: [PATCH] Adding-channel-specific-privilege-to-network
 Upstream-Status: Pending
-Signed-off-by: Deepika M <axiado-1597@axiado.com>
+Signed-off-by: Adarsh Kumar <adarsh.kumar@axiado.com>
 ---
- src/ethernet_interface.cpp | 127 +++++++++++++++++++++++++++++++++++++
- src/ethernet_interface.hpp |  45 ++++++++++++-
- src/network_manager.cpp    |  99 +++++++++++++++++++++++++++++
- src/network_manager.hpp    |   9 +++
+ src/ethernet_interface.cpp | 128 +++++++++++++++++++++++++++++++++++++
+ src/ethernet_interface.hpp |  44 ++++++++++++-
+ src/network_manager.cpp    | 100 +++++++++++++++++++++++++++++
+ src/network_manager.hpp    |   8 +++
  4 files changed, 278 insertions(+), 2 deletions(-)
 
 diff --git a/src/ethernet_interface.cpp b/src/ethernet_interface.cpp
-index cc96e4c..365a5c5 100644
+index c7c000a..39617b2 100644
 --- a/src/ethernet_interface.cpp
 +++ b/src/ethernet_interface.cpp
 @@ -26,6 +26,7 @@
@@ -33,21 +32,23 @@ index cc96e4c..365a5c5 100644
 +static constexpr const char* defaultChannelPriv = "priv-admin";
 +
  template <typename Func>
- inline decltype(std::declval<Func>()())
-     ignoreError(std::string_view msg, stdplus::zstring_view intf,
-@@ -163,6 +168,8 @@ void EthernetInterface::updateInfo(const InterfaceInfo& info, bool skipSignal)
+ inline decltype(std::declval<Func>()()) ignoreError(
+     std::string_view msg, stdplus::zstring_view intf,
+@@ -167,6 +172,8 @@ void EthernetInterface::updateInfo(const InterfaceInfo& info, bool skipSignal)
          EthernetInterfaceIntf::autoNeg(ethInfo.autoneg, skipSignal);
          EthernetInterfaceIntf::speed(ethInfo.speed, skipSignal);
      }
-+    
++
 +    getChannelPrivilege(*info.name);
  }
  
  void EthernetInterface::addAddr(const AddressInfo& info)
-@@ -1126,5 +1133,125 @@ void EthernetInterface::reloadConfigs()
+@@ -1166,5 +1173,126 @@ void EthernetInterface::reloadConfigs()
      manager.get().reloadConfigs();
  }
  
++
++
 +nlohmann::json EthernetInterface::readJsonFile(const std::string& configFile)
 +{
 +    std::ifstream jsonFile(configFile);
@@ -117,7 +118,7 @@ index cc96e4c..365a5c5 100644
 +
 +    if (writeJsonFile(networkChannelCfgFile, jsonData) != 0)
 +    {
-+        log<level::DEBUG>("Error in write JSON data to file",
++	     log<level::DEBUG>("Error in write JSON data to file",
 +                          entry("FILE=%s", networkChannelCfgFile));
 +        elog<InternalFailure>();
 +    }
@@ -143,7 +144,7 @@ index cc96e4c..365a5c5 100644
 +                   priv) == manager.get().supportedPrivList.end()))
 +    {
 +        log<level::ERR>("Invalid privilege");
-+        elog<InvalidArgument>(Argument::ARGUMENT_NAME("Privilege"),
++	  elog<InvalidArgument>(Argument::ARGUMENT_NAME("Privilege"),
 +                              Argument::ARGUMENT_VALUE(priv.c_str()));
 +    }
 +
@@ -167,11 +168,10 @@ index cc96e4c..365a5c5 100644
 +    return ChannelAccessIntf::maxPrivilege(std::move(priv));
 +}
 +
-+
  } // namespace network
  } // namespace phosphor
 diff --git a/src/ethernet_interface.hpp b/src/ethernet_interface.hpp
-index e400ed4..46113e0 100644
+index af12649..ad14146 100644
 --- a/src/ethernet_interface.hpp
 +++ b/src/ethernet_interface.hpp
 @@ -4,11 +4,13 @@
@@ -214,7 +214,7 @@ index e400ed4..46113e0 100644
  class Manager;
  
  class TestEthernetInterface;
-@@ -222,10 +229,18 @@ class EthernetInterface : public Ifaces
+@@ -222,6 +229,13 @@ class EthernetInterface : public Ifaces
       */
      std::string defaultGateway6(std::string gateway) override;
  
@@ -228,17 +228,19 @@ index e400ed4..46113e0 100644
      /** @brief Function to reload network configurations.
       */
      void reloadConfigs();
+@@ -231,6 +245,7 @@ class EthernetInterface : public Ifaces
+      */
+     bool emitLLDP(bool value) override;
  
 +    using ChannelAccessIntf::maxPrivilege;
      using EthernetInterfaceIntf::interfaceName;
      using EthernetInterfaceIntf::linkUp;
      using EthernetInterfaceIntf::mtu;
-@@ -321,6 +336,32 @@ class EthernetInterface : public Ifaces
+@@ -327,6 +342,31 @@ class EthernetInterface : public Ifaces
                        stdplus::PinnedRef<Manager> manager,
                        const AllIntfInfo& info, std::string&& objPath,
                        const config::Parser& config, bool enabled);
-+
-+    /** @brief Determines if the address is manually assigned
++     /** @brief Determines if the address is manually assigned
 +     *  @param[in] origin - The origin entry of the IP::Address
 +     *  @returns true/false value if the address is static
 +     */
@@ -262,28 +264,28 @@ index e400ed4..46113e0 100644
 +     *  @returns success or failure
 +     */
 +    int writeJsonFile(const std::string& configFile,
-+                      const nlohmann::json& jsonData);
++		     const nlohmann::json& jsonData);
  };
  
  } // namespace network
 diff --git a/src/network_manager.cpp b/src/network_manager.cpp
-index fb3a801..4fc990b 100644
+index 75c759b..f4acf0d 100644
 --- a/src/network_manager.cpp
 +++ b/src/network_manager.cpp
-@@ -32,6 +32,12 @@ using namespace phosphor::logging;
+@@ -33,7 +33,12 @@ using namespace phosphor::logging;
  using namespace sdbusplus::xyz::openbmc_project::Common::Error;
  using Argument = xyz::openbmc_project::Common::InvalidArgument;
  using std::literals::string_view_literals::operator""sv;
-+static constexpr const char* userMgrObjBasePath = "/xyz/openbmc_project/user";
++static constexpr const char* userMgrObjBasePath = "/xyz/openbmc_project/uer";
 +static constexpr const char* userMgrInterface =
 +    "xyz.openbmc_project.User.Manager";
 +static constexpr const char* propNameAllPrivileges = "AllPrivileges";
-+
-+std::unique_ptr<sdbusplus::bus::match_t> usrMgmtSignal(nullptr);
  
- static constexpr const char enabledMatch[] =
-     "type='signal',sender='org.freedesktop.network1',path_namespace='/org/"
-@@ -155,8 +161,101 @@ Manager::Manager(stdplus::PinnedRef<sdbusplus::bus_t> bus,
++std::unique_ptr<sdbusplus::bus::match_t> usrMgmtSignal(nullptr);
+ constexpr auto systemdBusname = "org.freedesktop.systemd1";
+ constexpr auto systemdObjPath = "/org/freedesktop/systemd1";
+ constexpr auto systemdInterface = "org.freedesktop.systemd1.Manager";
+@@ -162,6 +167,101 @@ Manager::Manager(stdplus::PinnedRef<sdbusplus::bus_t> bus,
      std::filesystem::create_directories(confDir);
      systemConf = std::make_unique<phosphor::network::SystemConfiguration>(
          bus, (this->objPath / "config").str);
@@ -330,8 +332,8 @@ index fb3a801..4fc990b 100644
 +        }
 +    }
 +    return userMgmtService;
- }
- 
++}
++
 +void Manager::initSupportedPrivilges()
 +{
 +    std::string userServiceName = getUserServiceName();
@@ -357,6 +359,7 @@ index fb3a801..4fc990b 100644
 +        supportedPrivList = std::get<std::vector<std::string>>(result);
 +    }
 +
++    
 +    // Resgister the signal
 +    if (usrMgmtSignal == nullptr)
 +    {
@@ -381,15 +384,14 @@ index fb3a801..4fc990b 100644
 +            });
 +    }
 +    return;
-+}
+ }
+ 
  void Manager::createInterface(const AllIntfInfo& info, bool enabled)
- {
-     if (ignoredIntf.find(info.intf.idx) != ignoredIntf.end())
 diff --git a/src/network_manager.hpp b/src/network_manager.hpp
-index b92c528..8da1a49 100644
+index 3bc8ad2..5b5108a 100644
 --- a/src/network_manager.hpp
 +++ b/src/network_manager.hpp
-@@ -120,6 +120,12 @@ class Manager : public ManagerIface
+@@ -128,6 +128,11 @@ class Manager : public ManagerIface
      {
          reloadPostHooks.push_back(std::move(hook));
      }
@@ -398,15 +400,14 @@ index b92c528..8da1a49 100644
 +
 +    /** @brief initializes the supportedPrivilege List */
 +    void initSupportedPrivilges();
-+
  
    protected:
      /** @brief Handle to the object used to trigger reloads of networkd. */
-@@ -159,6 +165,9 @@ class Manager : public ManagerIface
+@@ -167,6 +172,9 @@ class Manager : public ManagerIface
  
      /** @brief Creates the interface in the maps */
      void createInterface(const AllIntfInfo& info, bool enabled);
-+    
++
 +    /** Get the user management service name dynamically **/
 +    std::string getUserServiceName();
  };

@@ -1,19 +1,12 @@
-From 815459981575a9ed5f340d1ede9de7114039ea80 Mon Sep 17 00:00:00 2001
-From: Vipin Chandran <vchandran@axiado.com>
-Date: Sat, 3 May 2025 00:57:04 -0700
-Subject: [PATCH] Ensure post-code manager starts after lpcsnoop
-
-- Added `Requires` and `After` directives to ensure post-code manager starts after lpcsnoop.service.
-- Enabled automatic restart with `Restart=always` and `RestartSec=5` for automatic recovery
+From 9ae3c6f017f42390e81e9ed194ca6babd1ea85a3 Mon Sep 17 00:00:00 2001
+From: Adarsh Kumar <adarsh.kumar@axiado.com>
+Date: Fri, 13 Feb 2026 05:54:55 -0800
+Subject: [PATCH] Ensure post code manager starts after lpcsnoop
 
 Upstream-Status: Pending
 
----
- .../xyz.openbmc_project.State.Boot.PostCode@.service          | 4 ++++
- 1 file changed, 4 insertions(+)
-
 diff --git a/service_files/xyz.openbmc_project.State.Boot.PostCode@.service b/service_files/xyz.openbmc_project.State.Boot.PostCode@.service
-index db21c21..906cebc 100644
+index d4e8274..6d77548 100644
 --- a/service_files/xyz.openbmc_project.State.Boot.PostCode@.service
 +++ b/service_files/xyz.openbmc_project.State.Boot.PostCode@.service
 @@ -1,7 +1,11 @@
@@ -25,9 +18,9 @@ index db21c21..906cebc 100644
  [Service]
 +Restart=always
 +RestartSec=5
- ExecStart=/usr/bin/env post-code-manager --host %i
+ ExecStart=/usr/bin/env post-code-manager --host %i --config /usr/share/phosphor-post-code-manager/post-code-handlers.json
  SyslogIdentifier=post-code-manager%i
  Type=dbus
 -- 
-2.25.1
+2.34.1
 

@@ -1,0 +1,37 @@
+From 3122ab595184192a08367a36cbfbc2926566732b Mon Sep 17 00:00:00 2001
+From: Deepika M <axiado-1597@axiado.com>
+Date: Mon, 9 Feb 2026 02:20:20 -0800
+Subject: [PATCH] Fix SNMP trap failure for 64-bit (ASN_OPAQUE_U64) variables
+Upstream-Status: Pending
+Signed-off-by: Deepika M <axiado-1597@axiado.com>
+---
+ snmp_notification.cpp | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/snmp_notification.cpp b/snmp_notification.cpp
+index 9953038..387c554 100644
+--- a/snmp_notification.cpp
++++ b/snmp_notification.cpp
+@@ -41,9 +41,17 @@ bool Notification::addPDUVar(netsnmp_pdu& pdu, const OID& objID,
+         break;
+         case ASN_OPAQUE_U64:
+         {
+-            auto ltmp = std::get<uint64_t>(val);
++            uint64_t val64 = std::get<uint64_t>(val);
++
++            // Create an array of two 32-bit parts (this equals 16 bytes on arm 64 machine)
++           // index 0 is 'high', index 1 is 'low'
++            uint32_t data16[2];
++            data16[0] = static_cast<uint32_t>(val64 >> 32);
++            data16[1] = static_cast<uint32_t>(val64 & 0xFFFFFFFF);
++
++            // Use the array and explicitly pass 'sizeof(struct counter64)' to match the library
+             varList = snmp_pdu_add_variable(&pdu, objID.data(), objIDLen, type,
+-                                            &ltmp, sizeof(ltmp));
++                                    (u_char*)data16, sizeof(struct counter64));	    
+         }
+         break;
+         case ASN_OCTET_STR:
+-- 
+2.34.1
+

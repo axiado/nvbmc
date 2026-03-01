@@ -1,15 +1,13 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 SRC_URI = "git://github.com/NVIDIA/phosphor-led-manager;protocol=https;branch=develop"
-SRCREV = "90591a16ba613963d901e0414970315e12025ca9"
+SRCREV = "b706ea56442d74dde28f262cb8db3d93c59e8c73"
 
 SRC_URI:append = " file://power-led-controller.service \
                    file://power-led-config-default.json \
                    file://power-led-config-dc-scm.json \
                    file://update-power-led-config.sh \
                    "
-
-SRC_URI += "file://0001-Hotfix-for-power-led-controller.patch"
 
 FILES:${PN} += "${bindir}/power-led-controller"
 SYSTEMD_SERVICE:${PN} = "power-led-controller.service"

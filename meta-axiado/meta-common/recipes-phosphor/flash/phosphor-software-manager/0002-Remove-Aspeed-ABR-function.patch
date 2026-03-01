@@ -1,18 +1,15 @@
-From 90d3de92e56d6563504a7c8a5084bafc9e66962e Mon Sep 17 00:00:00 2001
-From: Kuan-Jui Chiu <kchiu@axiado.com>
-Date: Thu, 7 Aug 2025 02:24:40 -0700
+From ce7e8a66664c02a6f235fa0582cd1adb11136351 Mon Sep 17 00:00:00 2001
+From: Adarsh Kumar <adarsh.kumar@axiado.com>
+Date: Fri, 13 Feb 2026 04:21:50 -0800
 Subject: [PATCH] Remove Aspeed ABR function
 
 Upstream-Status: Pending
----
- obmc-flash-bmc | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/obmc-flash-bmc b/obmc-flash-bmc
-index 18f915f..e4a8b12 100644
---- a/obmc-flash-bmc
-+++ b/obmc-flash-bmc
-@@ -628,6 +628,8 @@ function mmc_setprimary() {
+diff --git a/bmc/obmc-flash-bmc b/bmc/obmc-flash-bmc
+index f9cc4e2..9eec6a2 100644
+--- a/bmc/obmc-flash-bmc
++++ b/bmc/obmc-flash-bmc
+@@ -646,6 +646,8 @@ function mmc_setprimary() {
  }
  
  function mmc_mirroruboot() {
