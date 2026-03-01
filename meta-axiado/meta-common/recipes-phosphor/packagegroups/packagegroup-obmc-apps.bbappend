@@ -7,4 +7,8 @@ RDEPENDS:${PN}-extras += "${@ 'anx7688-axiado' if d.getVar('SOC_REVISION') == 'r
                           sysproxy \
                           tcu-reset \
                           tdfu \
-                         "
+                          phosphor-snmp \
+                          snmp-policy \
+                          phosphor-dbus-monitor \
+                          "
+                         

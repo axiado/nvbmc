@@ -1,0 +1,89 @@
+From 1c0906e56de445003872f7b62682cf827fe9311f Mon Sep 17 00:00:00 2001
+From: Deepika M <axiado-1597@axiado.com>
+Date: Fri, 20 Feb 2026 04:09:12 -0800
+Subject: [PATCH] Fix to create triggers
+Upstream-Status: Pending
+Signed-off-by: Deepika M <axiado-1597@axiado.com>
+---
+ redfish-core/lib/trigger.hpp | 58 ++++++++++++++++++++++--------------
+ 1 file changed, 36 insertions(+), 22 deletions(-)
+
+diff --git a/redfish-core/lib/trigger.hpp b/redfish-core/lib/trigger.hpp
+index a543332c..986060cb 100644
+--- a/redfish-core/lib/trigger.hpp
++++ b/redfish-core/lib/trigger.hpp
+@@ -586,20 +586,7 @@ inline bool parseMetricProperties(crow::Response& res, Context& ctx)
+                 res, "MetricProperties/" + std::to_string(uriIdx), uriStr);
+             return false;
+         }
+-
+-        std::pair<std::string, std::string> split =
+-            redfish::sensor_utils::splitSensorNameAndType(sensorName);
+-        if (split.first.empty() || split.second.empty())
+-        {
+-            messages::propertyValueIncorrect(
+-                res, "MetricProperties/" + std::to_string(uriIdx), uriStr);
+-            return false;
+-        }
+-
+-        std::string sensorPath =
+-            "/xyz/openbmc_project/sensors/" + split.first + '/' + split.second;
+-
+-        ctx.sensors.emplace_back(sensorPath, uriStr);
++        ctx.sensorNames.emplace_back(sensorName, uriStr);
+         uriIdx++;
+     }
+     return true;
+@@ -969,14 +956,41 @@ inline void handleTriggerCollectionPost(
+ 
+     dbus::utility::async_method_call(
+         asyncResp,
+-        [asyncResp, id = ctx.id](const boost::system::error_code& ec,
+-                                 const std::string& dbusPath) {
+-            afterCreateTrigger(ec, dbusPath, asyncResp, id);
+-        },
+-        service, "/xyz/openbmc_project/Telemetry/Triggers",
+-        "xyz.openbmc_project.Telemetry.TriggerManager", "AddTrigger",
+-        "TelemetryService/" + ctx.id, ctx.name, ctx.actions, ctx.sensors,
+-        ctx.reports, ctx.numericThresholds, ctx.discreteThresholds);
++        [ctx, asyncResp](const boost::system::error_code& outerEc,
++              const std::vector<std::string>& objects) {
++                std::vector<std::pair<sdbusplus::message::object_path, std::string>> sensors;
++                if (outerEc)
++                {
++                    BMCWEB_LOG_ERROR("respHandler DBus error {}", outerEc);
++                    messages::internalError(asyncResp->res);
++                    return;
++                }
++                for (const std::string& object : objects)
++                {
++                    for (const std::pair<std::string, std::string>& sensorName : ctx.sensorNames) 
++                    {
++                        if (object.find(sensorName.first) != std::string::npos) {
++                            BMCWEB_LOG_DEBUG("Find sensor object path: {}", object);
++                            sensors.emplace_back(object, sensorName.second);
++                        }
++                    }
++                }
++                crow::connections::systemBus->async_method_call(
++                    [asyncResp, id = ctx.id](const boost::system::error_code& innerEc,
++                                            const std::string& dbusPath) {
++                    afterCreateTrigger(innerEc, dbusPath, asyncResp, id);
++                },
++                    service, "/xyz/openbmc_project/Telemetry/Triggers",
++                    "xyz.openbmc_project.Telemetry.TriggerManager", "AddTrigger",
++                    "TelemetryService/" + ctx.id, ctx.name, ctx.actions, sensors,
++                    ctx.reports, ctx.numericThresholds,ctx.discreteThresholds);
++                return;
++            },
++            "xyz.openbmc_project.ObjectMapper",
++            "/xyz/openbmc_project/object_mapper",
++            "xyz.openbmc_project.ObjectMapper", "GetSubTreePaths",
++            "/xyz/openbmc_project/sensors", 0,
++            std::array<const char*, 1>{"xyz.openbmc_project.Sensor.Value"});
+ }
+ 
+ } // namespace telemetry
+-- 
+2.34.1
+
