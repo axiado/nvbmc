@@ -13,4 +13,7 @@ SRC_URI += "file://0001-AXBUGS-1713-1763-1814-removed-irregularities-in-role.pat
 # Enable SNMP/SMTP
 EXTRA_OECMAKE:append = " -DBMCWEB_ENABLE_REDFISH_SNMP=ON "
 
+# Enable KVM
+EXTRA_OEMESON:append = " -Dkvm=enabled"
+
 CXX += "-Wno-error=free-nonheap-object"
