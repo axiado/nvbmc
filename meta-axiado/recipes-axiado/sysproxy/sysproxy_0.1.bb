@@ -13,6 +13,7 @@ SRC_URI = "file://sysproxy.service \
 
 ERROR_QA:remove = "buildpaths"
 WARNNING_QA:append = "buildpaths"
+INSANE_SKIP:${PN} += "already-stripped"
 
 do_install() {
     install -d ${D}${bindir}
