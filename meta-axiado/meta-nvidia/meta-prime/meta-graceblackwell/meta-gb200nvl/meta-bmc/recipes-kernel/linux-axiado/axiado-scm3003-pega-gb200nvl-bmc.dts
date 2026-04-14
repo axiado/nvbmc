@@ -806,20 +806,6 @@
 	};
 };
 
-// i2c-3
-&i3c16 {
-	analogix_i2c@28 {
-		compatible = "analogix,anx7688";
-		reg = <0x28 0x0 0x50>;
-		pwren-gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>;
-		reset-gpios = <&gpio1 9 GPIO_ACTIVE_HIGH>;
-	};
-	analogix_i2c1@2c {
-		compatible = "dummy";
-		reg = <0x2c 0x0 0x50>;
-	};
-};
-
 // i2c-5
 &mfd_i2c2 {
 	status = "okay";
