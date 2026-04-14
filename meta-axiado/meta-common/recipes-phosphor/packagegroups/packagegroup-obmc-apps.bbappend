@@ -1,5 +1,5 @@
 RDEPENDS:${PN}-network += " ax-net iptables iproute2 net-tools"
-RDEPENDS:${PN}-extras += "${@ 'anx7688-axiado' if d.getVar('SOC_REVISION') == 'revA' else '' } \
+RDEPENDS:${PN}-extras += " \
                           axiado-eip-firmware \
                           boot-state \
                           entity-manager \
