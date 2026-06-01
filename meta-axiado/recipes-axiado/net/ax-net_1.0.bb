@@ -23,14 +23,14 @@ RDEPENDS:${PN} += "bash"
 
 do_install() {
         install -d ${D}/etc/eip/scripts/
-        install -m 0777 ${UNPACKDIR}/config_eip_ns.sh ${D}/etc/eip/scripts/
-        install -m 0777 ${UNPACKDIR}/fwl_dmn.py ${D}/etc/eip/scripts/
-        install -m 0777 ${UNPACKDIR}/stats_1g.sh ${D}/etc/eip/scripts/
-        install -m 0777 ${UNPACKDIR}/stat_eip.sh ${D}/etc/eip/scripts/
-        install -m 0777 ${UNPACKDIR}/stat_shim_mac.sh ${D}/etc/eip/scripts/
-        install -m 0777 ${UNPACKDIR}/stat_phy_vsc.sh ${D}/etc/eip/scripts/
-        install -m 0777 ${UNPACKDIR}/stat_phy_mvl.sh ${D}/etc/eip/scripts/
-        install -m 0777 ${UNPACKDIR}/stat_hw_fwl.sh ${D}/etc/eip/scripts/
+        install -m 0777 ${WORKDIR}/config_eip_ns.sh ${D}/etc/eip/scripts/
+        install -m 0777 ${WORKDIR}/fwl_dmn.py ${D}/etc/eip/scripts/
+        install -m 0777 ${WORKDIR}/stats_1g.sh ${D}/etc/eip/scripts/
+        install -m 0777 ${WORKDIR}/stat_eip.sh ${D}/etc/eip/scripts/
+        install -m 0777 ${WORKDIR}/stat_shim_mac.sh ${D}/etc/eip/scripts/
+        install -m 0777 ${WORKDIR}/stat_phy_vsc.sh ${D}/etc/eip/scripts/
+        install -m 0777 ${WORKDIR}/stat_phy_mvl.sh ${D}/etc/eip/scripts/
+        install -m 0777 ${WORKDIR}/stat_hw_fwl.sh ${D}/etc/eip/scripts/
 }
 
 INHIBIT_PACKAGE_DEBUG_SPLIT = "1"

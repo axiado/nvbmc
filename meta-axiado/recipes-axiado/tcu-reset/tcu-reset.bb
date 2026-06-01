@@ -9,7 +9,7 @@ SRC_URI += "file://tcu-reset.sh"
 
 do_install:append() {
     install -d ${D}/usr/lib/systemd/system-shutdown
-    install -m 0755 ${UNPACKDIR}/tcu-reset.sh ${D}/usr/lib/systemd/system-shutdown/
+    install -m 0755 ${WORKDIR}/tcu-reset.sh ${D}/usr/lib/systemd/system-shutdown/
 }
 
 FILES:${PN} += "/usr/lib/systemd/system-shutdown/tcu-reset.sh"

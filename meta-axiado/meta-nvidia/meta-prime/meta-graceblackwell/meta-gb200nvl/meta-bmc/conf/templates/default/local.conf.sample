@@ -1,4 +1,4 @@
-MACHINE ??= "gb200nvl-bmc-axiado"
+MACHINE ??= "gb200nvl-bmc-axiado-github"
 DISTRO ?= "openbmc-phosphor"
 DISTRO_VERSION:append = ".${@time.time()}"
 PACKAGE_CLASSES ?= "package_rpm"
@@ -21,6 +21,8 @@ EXTRA_USERS_PARAMS = " \
   usermod -p '\$1\$UGMqyqdG\$FZiylVFmRRfl9Z0Ue8G7e/' root; \
   "
 
+BAD_RECOMMENDATIONS += "phosphor-settings-manager"
+
 include conf/password-policy.inc
 require conf/distro.inc
 
@@ -31,4 +33,4 @@ DL_DIR = "${TOPDIR}/../downloads"
 # Dbg builds initramfs image with filesystem + kernel in a single image and u-boot
 # Dev builds kernel-fitImage and eMMC image with wic filesystem and u-boot
 # Prod builds kernel-fitImage and eMMC image with wic filesystem and Axiado-signed u-boot
-#BUILD_VAR = "dbg"
+#BUILD_VAR = "prod"

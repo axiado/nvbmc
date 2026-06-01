@@ -9,7 +9,8 @@ SRC_URI += "file://u-boot-axiado-env"
 UBOOT_INITIAL_ENV = ""
 
 do_compile:append() {
-    ${B}/tools/mkenvimage -s ${UBOOT_ENV_SIZE} -o ${B}/${UBOOT_ENV_BINARY} ${UNPACKDIR}/u-boot-axiado-env
+    ${B}/tools/mkenvimage -s ${UBOOT_ENV_SIZE} -o ${B}/${UBOOT_ENV_BINARY} ${WORKDIR}/u-boot-axiado-env
+    ${B}/tools/mkenvimage -s ${UBOOT_ENV_SIZE} -o ${WORKDIR}/${UBOOT_ENV_BINARY} ${WORKDIR}/u-boot-axiado-env
 }
 
 PV = "2019.04+git${SRCPV}"

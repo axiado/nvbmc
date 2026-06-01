@@ -17,7 +17,7 @@ INSANE_SKIP:${PN} += "already-stripped"
 
 do_install() {
     install -d ${D}${bindir}
-    install -m 0755 ${UNPACKDIR}/sysmgr_proxy ${D}${bindir}
+    install -m 0755 ${WORKDIR}/sysmgr_proxy ${D}${bindir}
 }
 
 FILES:${PN} = "${bindir}/sysmgr_proxy"

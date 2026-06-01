@@ -1,15 +1,18 @@
-From 20134db0b402b8840c9df8dd01d6667fad99e246 Mon Sep 17 00:00:00 2001
-From: Adarsh Kumar <adarsh.kumar@axiado.com>
-Date: Thu, 12 Feb 2026 22:48:58 -0800
+From a34cd29129be4a429eb4935f6d12e03276cb9bb6 Mon Sep 17 00:00:00 2001
+From: Ginu George <axiado-2551@axiado.com>
+Date: Mon, 13 Apr 2026 05:41:25 -0700
 Subject: [PATCH] Add support to update u-boot within NOR flash
 
-Upstream-Status: Pending
+Signed-off-by: Ginu George <axiado-2551@axiado.com>
+---
+ obmc-flash-bmc | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
-diff --git a/bmc/obmc-flash-bmc b/bmc/obmc-flash-bmc
-index f9cc4e2..dfd37bd 100644
---- a/bmc/obmc-flash-bmc
-+++ b/bmc/obmc-flash-bmc
-@@ -575,15 +575,10 @@ function mmc_mount() {
+diff --git a/obmc-flash-bmc b/obmc-flash-bmc
+index 442bb7a..18f915f 100644
+--- a/obmc-flash-bmc
++++ b/obmc-flash-bmc
+@@ -562,15 +562,10 @@ function mmc_mount() {
  }
  
  function mmc_update() {

@@ -17,7 +17,7 @@ do_compile[noexec] = "1"
 
 do_install() {
         install -d ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra
-        install -m 0644 ${UNPACKDIR}/ax-logger.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra
+        install -m 0644 ${WORKDIR}/ax-logger.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra
 }
 
 FILES_${PN} = "${nonarch_base_libdir}/modules/${KERNEL_VERSION}/extra/ax-logger.ko"

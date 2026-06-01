@@ -11,5 +11,5 @@ INSANE_SKIP:${PN} += "already-stripped"
 
 do_install() {
     install -d ${D}${bindir}
-    install -m 0755 ${UNPACKDIR}/ax3000-fw-update ${D}${bindir}
+    install -m 0755 ${WORKDIR}/ax3000-fw-update ${D}${bindir}
 }

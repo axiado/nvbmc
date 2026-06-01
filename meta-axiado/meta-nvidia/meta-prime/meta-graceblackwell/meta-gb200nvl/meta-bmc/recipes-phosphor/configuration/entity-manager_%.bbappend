@@ -9,10 +9,10 @@ SRC_URI += "file://Carlo_E1.s_BP.json \
             "
 
 do_install:append() {
-     install -m 0444 ${UNPACKDIR}/Carlo_E1.s_BP.json ${D}/usr/share/entity-manager/configurations
-     install -m 0444 ${UNPACKDIR}/Carlo_IPEX.json ${D}/usr/share/entity-manager/configurations
-     install -m 0444 ${UNPACKDIR}/Carlo_NIC.json ${D}/usr/share/entity-manager/configurations
-     install -m 0444 ${UNPACKDIR}/Carlo_OSFP.json ${D}/usr/share/entity-manager/configurations
-     install -m 0444 ${UNPACKDIR}/Chassis_Carlo_1RU.json ${D}/usr/share/entity-manager/configurations
-     install -m 0444 ${UNPACKDIR}/PDB_PEGA.json ${D}/usr/share/entity-manager/configurations
+     install -m 0444 ${WORKDIR}/Carlo_E1.s_BP.json ${D}/usr/share/entity-manager/configurations
+     install -m 0444 ${WORKDIR}/Carlo_IPEX.json ${D}/usr/share/entity-manager/configurations
+     install -m 0444 ${WORKDIR}/Carlo_NIC.json ${D}/usr/share/entity-manager/configurations
+     install -m 0444 ${WORKDIR}/Carlo_OSFP.json ${D}/usr/share/entity-manager/configurations
+     install -m 0444 ${WORKDIR}/Chassis_Carlo_1RU.json ${D}/usr/share/entity-manager/configurations
+     install -m 0444 ${WORKDIR}/PDB_PEGA.json ${D}/usr/share/entity-manager/configurations
 }

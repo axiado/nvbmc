@@ -24,12 +24,12 @@ SYSTEMD_SERVICE:${PN} = "usb-connect-on-power-up-host.service create-usb-rndis.s
 
 do_install() {
         install -d ${D}/etc/usb/
-        install -m 0777 ${UNPACKDIR}/usbgadget.sh ${D}/etc/usb/
-        install -m 0777 ${UNPACKDIR}/power_monitor_host_server_usb.sh ${D}/etc/usb/power_monitor_usb.sh
+        install -m 0777 ${WORKDIR}/usbgadget.sh ${D}/etc/usb/
+        install -m 0777 ${WORKDIR}/power_monitor_host_server_usb.sh ${D}/etc/usb/power_monitor_usb.sh
 
         install -d ${D}/etc/udev/rules.d/
-        install -m 0644 ${UNPACKDIR}/ax-usb.rules ${D}/etc/udev/rules.d/
+        install -m 0644 ${WORKDIR}/ax-usb.rules ${D}/etc/udev/rules.d/
 
         install -d ${D}${bindir}
-        install -m 0777 ${UNPACKDIR}/create-usb-rndis.sh ${D}${bindir}/
+        install -m 0777 ${WORKDIR}/create-usb-rndis.sh ${D}${bindir}/
 }
