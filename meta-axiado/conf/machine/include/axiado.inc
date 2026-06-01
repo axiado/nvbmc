@@ -8,7 +8,7 @@ require VERSION.inc
 LATEST_RELEASE_VERSION = "release/release-${COMPONENT_VERSION_MAJOR}.${COMPONENT_VERSION_MINOR}.${COMPONENT_PATCHLEVEL}"
 
 PREFERRED_PROVIDER_virtual/kernel ?= "linux-axiado"
-PREFERRED_VERSION_linux-axiado ?= "6.6.16+git"
+PREFERRED_VERSION_linux-axiado ?= "6.6.106+git"
 PREFERRED_PROVIDER_virtual/bootloader ?= "u-boot-axiado"
 PREFERRED_PROVIDER_u-boot ?= "u-boot-axiado"
 PREFERRED_VERSION_u-boot-axiado ?= "2022.01+git"
