@@ -26,7 +26,8 @@
 		i2c12 = &i3c12;
 		i2c13 = &i3c13;
 		i2c14 = &i3c6;
-		i2c15 = &i3c4;
+		//i2c15 = &i3c4;
+		i2c15 = &mfd_i2c5;
 		i2c16 = &imux16;
 		i2c17 = &imux17;
 		i2c18 = &imux18;
@@ -1153,6 +1154,11 @@
 		compatible = "max31790";
 		reg = <0x2f>;
 	};
+};
+
+// i2c-15
+&mfd_i2c5 {
+	status = "okay";
 };
 
 // i2c-2

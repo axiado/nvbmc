@@ -15,6 +15,10 @@ while [ ! -d $USB_GADGET_CFG ]; do
     sleep 1
 done
 
+
+echo "0x046b" > $USB_GADGET/idVendor
+echo "0xffb0" > $USB_GADGET/idProduct
+
 # Create and attach RNDIS function to USB gadget
 if [ ! -d $USB_GADGET_FUNC/$USB_RNDIS_NAME ]; then
     mkdir $USB_GADGET_FUNC/$USB_RNDIS_NAME

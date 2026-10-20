@@ -1,0 +1,12 @@
+[Unit]
+Description=Start hostusb0 phosphor-ipmi-net Service
+After=usb-connect-on-power-up-host.service
+ 
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=2
+ExecStart=/usr/bin/env /etc/usb/hostusb-intf-monitor.sh
+ 
+[Install]
+WantedBy=multi-user.target

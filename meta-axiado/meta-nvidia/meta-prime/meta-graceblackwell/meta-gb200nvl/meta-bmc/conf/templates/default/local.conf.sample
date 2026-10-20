@@ -33,4 +33,4 @@ DL_DIR = "${TOPDIR}/../downloads"
 # Dbg builds initramfs image with filesystem + kernel in a single image and u-boot
 # Dev builds kernel-fitImage and eMMC image with wic filesystem and u-boot
 # Prod builds kernel-fitImage and eMMC image with wic filesystem and Axiado-signed u-boot
-#BUILD_VAR = "prod"
+BUILD_VAR = "prod"

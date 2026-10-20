@@ -1,0 +1,10 @@
+[Unit]
+Description=Watch for hostusb0 network interface
+Before=ipmi-net-hostusb0.service
+
+[Path]
+PathExists=/sys/devices/platform/soc/81200000.usb/gadget.0/net/hostusb0
+Unit=ipmi-net-hostusb0.service
+
+[Install]
+WantedBy=multi-user.target

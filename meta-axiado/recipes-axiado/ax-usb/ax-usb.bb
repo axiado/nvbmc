@@ -18,14 +18,17 @@ SRC_URI += "file://ax-usb.rules \
             file://power_monitor_host_server_usb.sh \
             file://usbgadget.sh \
             file://usb-connect-on-power-up-host.service \
+            file://hostusb-intf-monitor.sh \
+            file://ipmi-net-hostusb0.service \
             "
 
-SYSTEMD_SERVICE:${PN} = "usb-connect-on-power-up-host.service create-usb-rndis.service"
+SYSTEMD_SERVICE:${PN} = "usb-connect-on-power-up-host.service create-usb-rndis.service ipmi-net-hostusb0.service"
 
 do_install() {
         install -d ${D}/etc/usb/
         install -m 0777 ${WORKDIR}/usbgadget.sh ${D}/etc/usb/
         install -m 0777 ${WORKDIR}/power_monitor_host_server_usb.sh ${D}/etc/usb/power_monitor_usb.sh
+        install -m 0777 ${WORKDIR}/hostusb-intf-monitor.sh ${D}/etc/usb/hostusb-intf-monitor.sh
 
         install -d ${D}/etc/udev/rules.d/
         install -m 0644 ${WORKDIR}/ax-usb.rules ${D}/etc/udev/rules.d/
