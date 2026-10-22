@@ -9,6 +9,8 @@ SRC_URI:append:gb200nvl-bmc-axiado-github = " file://usb-net.scc"
 SRC_URI:append:gb200nvl-bmc-axiado-github = " file://usb-net.cfg"
 SRC_URI:append:gb200nvl-bmc-axiado-github = " file://usb-storage.scc"
 SRC_URI:append:gb200nvl-bmc-axiado-github = " file://usb-storage.cfg"
+SRC_URI:append:gb200nvl-bmc-axiado-github = " file://nbd.scc"
+SRC_URI:append:gb200nvl-bmc-axiado-github = " file://nbd.cfg"
 
 do_configure:append:gb200nvl-bmc-axiado() {
     cp ${WORKDIR}/axiado-gb200nvl-bmc-mt2.dts ${S}/arch/arm64/boot/dts/axiado/

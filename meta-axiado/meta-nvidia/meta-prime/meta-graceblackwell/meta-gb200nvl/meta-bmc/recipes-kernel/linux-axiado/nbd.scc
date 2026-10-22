@@ -1,0 +1,3 @@
+define KFEATURE_DESCRIPTION "Enable Network Block Device (NBD) support"
+
+kconf non-hardware nbd.cfg

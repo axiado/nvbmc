@@ -22,14 +22,6 @@ PROTOCOL=$(cat ${DEVPATH}/../bInterfaceProtocol)
 SUBCLASS=$(cat ${DEVPATH}/$DEVICE/../bInterfaceSubClass)
 
 KERNEL_NAME="$3" # Get kernel name
-UDC_PATH="/sys/class/udc"
-udc_0=$(ls -1 "$UDC_PATH" | head -n 1)
-
-# Get current power state via D-Bus
-power_state=$(busctl get-property xyz.openbmc_project.State.Chassis \
-    /xyz/openbmc_project/state/chassis0 \
-    xyz.openbmc_project.State.Chassis \
-    CurrentPowerState | awk '{print $2}' | tr -d '"')
 
 # Create Mass storage folder to configfs path
 create_gadget_mass_storage_device()
@@ -49,7 +41,7 @@ set_gadget_mass_storage_device()
 	echo "link after" > /dev/console
 	# have device node to lun file link to the host
  	echo "/dev/$KERNEL_NAME" > /dev/console
-	if [[ "$power_state" == *".PowerState.On" ]]; then # monitor host system power on
+	if [ -f /run/bmc-state/CHASSIS_IS_PWR_ON ]; then # checking the file to monitor nvidia power on
 		echo "/dev/$KERNEL_NAME" > $USB_GADGET_OBMC_HID/functions/mass_storage.ms$KERNEL_NAME/lun.0/file
 		echo 1 > $USB_GADGET_OBMC_HID/functions/mass_storage.ms$KERNEL_NAME/lun.0/removable
 	fi
@@ -107,14 +99,9 @@ start()
 	start-stop-daemon --start --background --oknodo --quiet --exec /usr/bin/adbd
 	sleep 1
 	#Bind UDC
-	if [[ "$power_state" == *".PowerState.On" ]]; then #checking host system power on to bind the UDC
-		# Check if udc found
-		if [ -z "$udc_0" ]; then
-			echo "No UDC found!" > /dev/console
-			exit 1
-		fi
-		echo "$udc_0" > $USB_GADGET_OBMC_HID/UDC #Port Name USB2_2 (USB2.0_P2 as per schametic)
+	if [ -f /run/bmc-state/CHASSIS_IS_PWR_ON ]; then #checking if file exist then bind the UDC
 		echo "UDC binded" > /dev/console
+		echo "81200000.udc" > $USB_GADGET_OBMC_HID/UDC #Port Name USB2_2 (USB2.0_P2 as per schametic)
 	elif ! [ -f /etc/usb/USB_dev_connect ]; then #create a file to connect USB after host power on
 		echo "Nvidia power down while start" > /dev/console
 		touch /etc/usb/USB_dev_connect
@@ -147,14 +134,9 @@ stop()
        	 		echo "File not found for device $DEVICE_PATH"
     		fi
     	fi
-	if [[ "$power_state" == *".PowerState.On" ]]; then #checking host system power on to bind the UDC
-		# Check if udc found
-		if [ -z "$udc_0" ]; then
-			echo "No UDC found!" > /dev/console
-			exit 1
-		fi
-		echo "$udc_0" > $USB_GADGET_OBMC_HID/UDC #Port Name USB2_2 (USB2.0_P2 as per schametic)
+	if [ -f /run/bmc-state/CHASSIS_IS_PWR_ON ]; then #checking if file exist then bind the UDC
 		echo "UDC binded" > /dev/console
+		echo "81200000.udc" > $USB_GADGET_OBMC_HID/UDC #Port Name USB2_2 (USB2.0_P2 as per schametic)
 	elif ! [ -f /etc/usb/USB_dev_connect ]; then #create a file to connect USB after host power on
 		echo "Nvidia power down while stop" > /dev/console
 		touch /etc/usb/USB_dev_connect
@@ -173,3 +155,5 @@ elif [ "$1" = "--stop" ]; then
 	echo "STOP CALLED" > /dev/console
 	stop
 fi
+
+
