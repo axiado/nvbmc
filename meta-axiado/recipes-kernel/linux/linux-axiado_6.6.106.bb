@@ -4,6 +4,7 @@ KSRC = "git://github.com/axiado/linux-axiado;protocol=https;branch=${SRCBRANCH}"
 SRC_URI += " \
             file://kernel.scc \
             file://kernel.cfg \
+            file://0001-i2c-add-probe_new-to-i2c_driver.patch \
             "
 
 LINUX_VERSION ?= "6.6.106"

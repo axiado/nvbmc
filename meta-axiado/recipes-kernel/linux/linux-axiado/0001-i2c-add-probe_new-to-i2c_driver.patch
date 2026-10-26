@@ -1,0 +1,34 @@
+From 3819cd110c890778092e04b1c5fbf88fdb4dcd00 Mon Sep 17 00:00:00 2001
+From: ami-axiado <axiado-2600@axiado.com>
+Date: Mon, 26 Oct 2026 15:14:26 +0530
+Subject: [PATCH] i2c: add probe_new callback to struct i2c_driver
+
+Re-add the .probe_new member to struct i2c_driver so drivers that
+still register through it build against this 6.6 kernel.
+
+Signed-off-by: ami-axiado <axiado-2600@axiado.com>
+---
+ include/linux/i2c.h | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index 5a0c667ca114..7aeb889e8a26 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -275,7 +275,12 @@ struct i2c_driver {
+ 	int (*probe)(struct i2c_client *client);
+ 	void (*remove)(struct i2c_client *client);
+ 
+-
++	/* New driver model interface to aid the seamless removal of the
++	 * current probe ()'s, more commonly unused than used second
++	 * parameter.
++	 */
++	int (*probe_new) (struct i2c_client *client) ;
++	
+ 	/* driver model interfaces that don't relate to enumeration  */
+ 	void (*shutdown)(struct i2c_client *client);
+ 
+-- 
+2.43.0
+
